@@ -2,25 +2,22 @@ import PropTypes from 'prop-types';
 import {useState} from 'react';
 import {assignId} from '../../../utils/generateRandomId';
 import style from './Tabs.module.css';
-import {ReactComponent as ArrowIcon} from './img/arrow.svg';
-import {ReactComponent as EyeIcon} from './img/eye.svg';
-import {ReactComponent as HomeIcon} from './img/home.svg';
-import {ReactComponent as PostIcon} from './img/post.svg';
-import {ReactComponent as SaveIcon} from './img/save.svg';
 import {useEffect} from 'react';
 import {debounceRaf} from '../../../utils/debounce';
+import {SVG} from '../../../UI/SVG';
 
 const LIST = [
-  {value: 'Главные', Icon: EyeIcon},
-  {value: 'Просмотренные', Icon: HomeIcon},
-  {value: 'Сохраненные', Icon: PostIcon},
-  {value: 'Мои посты', Icon: SaveIcon},
+  {value: 'Главные', Icon: 'Home'},
+  {value: 'Топ', Icon: 'Top'},
+  {value: 'Лучшие', Icon: 'Best'},
+  {value: 'Горячие', Icon: 'Hot'},
 ].map(assignId);
 
 export const Tabs = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdown, setIsDropdown] = useState(false);
   const [list] = useState(LIST);
+  const [menuItem, setMenuItem] = useState(list[0].value);
 
   const handlerResize = () => {
     if (document.documentElement.clientWidth < 768) {
@@ -29,7 +26,6 @@ export const Tabs = () => {
       setIsDropdown(false);
     }
   };
-
 
   useEffect(() => {
     const debounceResize = debounceRaf(handlerResize);
@@ -44,8 +40,8 @@ export const Tabs = () => {
     <div className={style.container}>
       {isDropdown && <div className={style.wrapperBtn}>
         <button className={style.btn} onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-          Добавить пост
-          <ArrowIcon width={15} height={15}/>
+          {menuItem}
+          <SVG width={15} height={15} itemName='Arrow' />
         </button>
       </div>}
 
@@ -56,12 +52,10 @@ export const Tabs = () => {
           }}>
             <button
               className={style.btn}
-              onClick={() => {
-                console.log(value);
-              }}
+              onClick={() => setMenuItem(value)}
             >
               {value}
-              {Icon && <Icon width={25} height={25} />}
+              {Icon && <SVG itemName={Icon} width={25} height={25} />}
             </button>
           </li>
         ))}
