@@ -41,10 +41,14 @@ Text.propTypes = {
   tsize: PropTypes.number,
   dsize: PropTypes.number,
   className: PropTypes.string,
-  dateTime: PropTypes.string,
+  dateTime: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
   children: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object,
-    PropTypes.array
+    PropTypes.array,
+    PropTypes.node,
   ])
 };

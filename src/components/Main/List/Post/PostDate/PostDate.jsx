@@ -8,5 +8,8 @@ export const PostDate = ({date}) => (
 );
 
 PostDate.propTypes = {
-  date: PropTypes.string,
+  date: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
 };

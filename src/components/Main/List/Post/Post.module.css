@@ -14,22 +14,11 @@
   border-radius: 20px;
 }
 
-.img {
-  grid-area: img;
-  border-radius: 20px;
-  align-self: center;
-}
-
 @media (min-width: 580px) {
   .post {
     grid-template-columns: 195px 1fr;
     grid-template-areas:
       'img content content'
       'img rating data';
-  }
-
-  .date {
-    font-size: 16px;
-    padding-right: 10px;
   }
 }
