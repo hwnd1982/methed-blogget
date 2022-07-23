@@ -9,14 +9,22 @@ import {usePostData} from '../../hooks/usePostData';
 import {Comments} from './Comments/Comments';
 import {FormComment} from './FormComment/FormComment';
 import {Spiner} from '../../UI/Spiner';
+import {useState} from 'react';
 
 export const Modal = ({id, closeModal}) => {
   const [post, comments] = usePostData(id);
+  const [myCommentForm, setMyCommentForm] = useState(false);
   const overlayRef = useRef(null);
   const closeRef = useRef(null);
+  const textariaRef = useRef(null);
   const handelClick = ({target}) =>
     (target === overlayRef.current || closeRef.current.contains(target)) && closeModal();
   const handelKey = ({key}) => (key === 'Escape' && closeModal());
+  const handleCommentForm = () => {
+    if (myCommentForm) return textariaRef.current.focus();
+
+    setMyCommentForm(true);
+  };
 
   useEffect(() => {
     document.addEventListener('keydown', handelKey);
@@ -24,6 +32,11 @@ export const Modal = ({id, closeModal}) => {
       document.removeEventListener('keydown', handelKey);
     };
   }, []);
+
+  useEffect(() => {
+    if (!myCommentForm) return;
+    textariaRef.current.focus();
+  }, [myCommentForm]);
 
   return ReactDOM.createPortal((
     <div className={style.overlay} ref={overlayRef} onClick={handelClick}>
@@ -46,6 +59,9 @@ export const Modal = ({id, closeModal}) => {
           </div>
 
           <Text As='p' color='orange' className={style.author}>{post.author}</Text>
+
+          <button className={style.btn} onClick={handleCommentForm}>Добавить комментарий</button>
+
           <div className={style.closeWrap}>
             <button className={style.close} ref={closeRef}>
               <SVG itemName='Close'/>
@@ -53,7 +69,7 @@ export const Modal = ({id, closeModal}) => {
           </div>
 
           <Comments comments={comments} />
-          <FormComment />
+          {myCommentForm && <FormComment textariaRef={textariaRef} />}
         </div> :
         <Spiner />
       }

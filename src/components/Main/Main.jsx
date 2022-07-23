@@ -9,7 +9,6 @@ export const Main = () => (
     <Layout>
       <Tabs />
       <List />
-      {/* <SVG url='./img/eye.svg' /> */}
     </Layout>
   </main>
 );

@@ -1,22 +1,31 @@
-import {useContext, useRef} from 'react';
+import PropTypes from 'prop-types';
+import {useContext} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {authContext} from '../../../context/authContext';
+import {updateComment} from '../../../store';
 import {Text} from '../../../UI/Text';
 import style from './FormComment.module.css';
 
-export const FormComment = () => {
+export const FormComment = ({textariaRef}) => {
+  const value = useSelector(store => store.comment);
+  const dispatch = useDispatch();
   const {auth} = useContext(authContext);
-  const textareaRef = useRef(null);
-  const handelForm = event => {
+  const handelSubmit = event => {
     event.preventDefault();
-    console.log(textareaRef.current.value);
-    textareaRef.current.value = '';
+    console.log(value);
   };
 
+  const handelChange = ({target}) => dispatch(updateComment(target.value));
+
   return (
-    <form className={style.form} onSubmit={handelForm}>
+    <form className={style.form} onSubmit={handelSubmit}>
       <Text As='h3' size={14} tsize={18}>{auth.name}</Text>
-      <textarea ref={textareaRef} className={style.textarea}></textarea>
+      <textarea ref={textariaRef} onChange={handelChange} value={value} className={style.textarea}></textarea>
       <button className={style.btn}>Отправить</button>
     </form>
   );
+};
+
+FormComment.propTypes = {
+  textariaRef: PropTypes.object,
 };

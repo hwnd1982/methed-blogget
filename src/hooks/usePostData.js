@@ -1,11 +1,11 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 import {useEffect} from 'react';
 import {URL_API} from '../api/const';
-import {tokenContext} from '../context/tokenContext';
+import {useSelector} from 'react-redux';
 
 
 export const usePostData = id => {
-  const {token} = useContext(tokenContext);
+  const token = useSelector(store => store.token);
   const [post, setPost] = useState([]);
   const fetchPosts = async () => {
     try {

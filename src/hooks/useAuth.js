@@ -1,14 +1,16 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useEffect} from 'react';
 import {URL_API} from '../api/const';
-import {tokenContext} from '../context/tokenContext';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteToken} from '../store';
 
 export const useAuth = () => {
-  const {token, delToken} = useContext(tokenContext);
+  const token = useSelector(store => store.token);
+  const dispatch = useDispatch();
   const [auth, setAuth] = useState({});
 
   const clearAuth = () => {
     setAuth({});
-    delToken();
+    dispatch(deleteToken());
   };
 
   const fetchAuth = async () => {
