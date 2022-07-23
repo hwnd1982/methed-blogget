@@ -47,6 +47,9 @@
   --grey99: hsl(0, 0%, 60%);
   --grey66: hsl(0, 0%, 40%);
   --grey33: hsl(0, 0%, 20%);
+
+  --animationDuration: 1.2s;
+  --spinkit-size: 150px;
 }
 
 html {

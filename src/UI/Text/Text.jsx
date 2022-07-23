@@ -16,6 +16,7 @@ export const Text = props => {
     href,
     bold,
     dateTime,
+    onClick,
   } = props;
 
   const classes = classNames(
@@ -28,7 +29,7 @@ export const Text = props => {
     {[style[`fsd${dsize}`]]: dsize},
   );
 
-  return <As className={classes} href={href} dateTime={dateTime}>{children}</As>;
+  return <As className={classes} href={href} dateTime={dateTime} onClick={onClick}>{children}</As>;
 };
 
 Text.propTypes = {
@@ -50,5 +51,6 @@ Text.propTypes = {
     PropTypes.object,
     PropTypes.array,
     PropTypes.node,
-  ])
+  ]),
+  onClick: PropTypes.func,
 };

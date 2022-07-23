@@ -7,13 +7,13 @@ import {PostDate} from './PostDate/PostDate';
 import {Thumbnail} from './Thumbnail/Thumbnail';
 
 export const Post = ({postData}) => {
-  const {title, author, ups, date, thumbnail} = postData;
+  const {id, title, ups, date, thumbnail, author, selftext} = postData;
 
   return (
     <li className={style.post}>
       <Thumbnail title={title} thumbnail={thumbnail} />
-      <Content title={title} author={author} />
-      <Rating ups={ups}/>
+      <Content id={id} title={title} author={author} selftext={selftext} />
+      <Rating ups={ups} place='Post'/>
       <PostDate date={date}/>
       <Delete />
     </li>

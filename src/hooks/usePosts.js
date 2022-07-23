@@ -14,18 +14,23 @@ export const usePosts = () => {
           Authorization: `bearer ${token}`,
         },
       });
-      const data = await response.json();
-      const postData = data.data.children.map(({data: {title, thumbnail, author, ups, created}}) =>
+
+      if (response.status === 401) throw new Error(response.status);
+
+      const {data: {children: data}} = await response.json();
+      const postsData = data.map(({data: {id, title, selftext, thumbnail, author, ups, created}}) =>
         ({
+          id,
           title,
+          selftext,
           thumbnail: /^https:\/\//.test(thumbnail) ? thumbnail.replace(/\?.*$/, '') : '',
           author,
           ups,
           date: created
         }));
-      // console.log(data.data.children);
 
-      setPosts(postData);
+      // console.log(postsData);
+      setPosts(postsData);
     } catch (err) {
       console.warn(err);
     }

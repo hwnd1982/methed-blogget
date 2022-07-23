@@ -16,6 +16,7 @@
 
 @media (min-width: 580px) {
   .post {
+    min-height: 195px;
     grid-template-columns: 195px 1fr;
     grid-template-areas:
       'img content content'

@@ -11,6 +11,7 @@ import {ReactComponent as Arrow} from './svg/arrow.svg';
 import {ReactComponent as Delete} from './svg/delete.svg';
 import {ReactComponent as Up} from './svg/up.svg';
 import {ReactComponent as Down} from './svg/down.svg';
+import {ReactComponent as Close} from './svg/close.svg';
 
 const SVGCollection = {
   Logo,
@@ -24,6 +25,7 @@ const SVGCollection = {
   Delete,
   Up,
   Down,
+  Close,
 };
 
 export const SVG = ({itemName, className, width, height}) => {

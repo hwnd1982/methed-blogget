@@ -1,0 +1,32 @@
+.list {
+  padding: 15px 0;
+}
+
+.item {
+  margin-bottom: 20px;
+}
+
+.author {
+  margin-bottom: 10px;
+}
+
+.comment {
+  display: block;
+  white-space: pre-line;
+  margin-bottom: 10px;
+}
+
+.state {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .list {
+    padding: 30px 0;
+  }
+
+  .item {
+    margin-bottom: 30px;
+  }
+}

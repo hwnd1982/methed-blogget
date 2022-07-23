@@ -19,6 +19,8 @@ export const useAuth = () => {
         },
       });
 
+      if (response.status === 401) throw new Error(response.status);
+
       const data = await response.json();
       const {subreddit: {title: name}, 'icon_img': iconImg} = data;
       const img = iconImg.replace(/\?.*$/, '');

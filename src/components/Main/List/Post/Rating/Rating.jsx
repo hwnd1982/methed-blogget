@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import {SVG} from '../../../../../UI/SVG';
 import {Text} from '../../../../../UI/Text';
 
-export const Rating = ({ups}) => (
-  <div className={style.rating}>
+export const Rating = ({ups, place}) => (
+  <div className={style[`rating${place}`]}>
     <button className={style.up} aria-label='Повысить рейтинг'>
       <SVG itemName='Up' />
     </button>
@@ -17,4 +17,5 @@ export const Rating = ({ups}) => (
 
 Rating.propTypes = {
   ups: PropTypes.number,
+  place: PropTypes.string,
 };
