@@ -4,7 +4,7 @@ import {Text} from '../../../../../UI/Text';
 import {useState} from 'react';
 import Modal from '../../../../Modal';
 
-export const Content = ({id, title, author, selftext}) => {
+export const Content = ({id, title, author}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -27,10 +27,7 @@ export const Content = ({id, title, author, selftext}) => {
       {
         isModalOpen &&
           <Modal
-            id = {id}
-            title={title}
-            author={author}
-            selftext={selftext}
+            id={id}
             closeModal={() => setIsModalOpen(false)}
           />
       }

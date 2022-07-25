@@ -1,48 +1,19 @@
-import {useState} from 'react';
 import {useEffect} from 'react';
-import {URL_API} from '../api/const';
-import {useSelector} from 'react-redux';
-
+import {useDispatch, useSelector} from 'react-redux';
+import {postRequestAsync} from '../store/post/post';
 
 export const usePostData = id => {
-  const token = useSelector(store => store.token);
-  const [post, setPost] = useState([]);
-  const fetchPosts = async () => {
-    try {
-      const response = await fetch(`${URL_API}/comments/${id}`, {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      });
-
-      if (response.status === 401) throw new Error(response.status);
-
-      const [{data: {children: [{data: post}]}}, {data: {children: comments}}] = await response.json();
-      const postData = {
-        id: post.id,
-        title: post.title,
-        selftext: post.selftext,
-        thumbnail: /^https:\/\//.test(post.thumbnail) ? post.thumbnail.replace(/\?.*$/, '') : '',
-        author: post.author,
-        ups: post.ups,
-        date: post.created
-      };
-      const commentsData = comments
-        .map(({data: {id, author, body, created, ups}}) => ({id, author, body, date: created, ups}))
-        .filter(comment => comment.author && comment.author !== '[deleted]' && comment.body !== '[removed]');
-
-      // console.log(postData, commentsData);
-      setPost([postData, commentsData]);
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+  const dispatch = useDispatch();
+  const token = useSelector(store => store.token.token);
+  const post = useSelector(store => store.post.data);
+  const comments = useSelector(store => store.post.comments);
+  const loading = useSelector(store => store.post.loading);
 
   useEffect(() => {
     if (!token) return;
 
-    fetchPosts();
+    dispatch(postRequestAsync(id));
   }, [token]);
 
-  return post;
+  return [post, comments, loading];
 };

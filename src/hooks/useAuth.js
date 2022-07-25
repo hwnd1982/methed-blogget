@@ -1,44 +1,25 @@
-import {useState, useEffect} from 'react';
-import {URL_API} from '../api/const';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {deleteToken} from '../store';
+import {deleteToken} from '../store/token/token';
+import {authLogout, authRequestAsync} from '../store/auth/auth';
 
 export const useAuth = () => {
-  const token = useSelector(store => store.token);
   const dispatch = useDispatch();
-  const [auth, setAuth] = useState({});
+  const auth = useSelector(store => store.auth.data);
+  const token = useSelector(store => store.token.token);
+  const loading = useSelector(store => store.auth.loading);
 
-  const clearAuth = () => {
-    setAuth({});
+  const logout = () => {
     dispatch(deleteToken());
-  };
-
-  const fetchAuth = async () => {
-    try {
-      const response = await fetch(`${URL_API}/api/v1/me`, {
-        headers: {
-          Authorization: `bearer ${token}`
-        },
-      });
-
-      if (response.status === 401) throw new Error(response.status);
-
-      const data = await response.json();
-      const {subreddit: {title: name}, 'icon_img': iconImg} = data;
-      const img = iconImg.replace(/\?.*$/, '');
-
-      setAuth({name, img});
-    } catch (err) {
-      console.warn(err);
-      clearAuth();
-    }
+    dispatch(authLogout());
   };
 
   useEffect(() => {
     if (!token) return;
 
-    fetchAuth();
+    dispatch(authRequestAsync());
   }, [token]);
 
-  return [auth, clearAuth];
+
+  return [auth, loading, logout];
 };
