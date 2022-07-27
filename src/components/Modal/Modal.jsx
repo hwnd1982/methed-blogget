@@ -10,9 +10,10 @@ import {Comments} from './Comments/Comments';
 import {FormComment} from './FormComment/FormComment';
 import {Spinner} from '../../UI/Spinner';
 import {useState} from 'react';
+import {Notifications} from '../Notifications/Notifications';
 
 export const Modal = ({id, closeModal}) => {
-  const [post, comments, loading] = usePostData(id);
+  const [post, comments, loading, token] = usePostData(id);
 
   const [myCommentForm, setMyCommentForm] = useState(false);
   const overlayRef = useRef(null);
@@ -40,43 +41,46 @@ export const Modal = ({id, closeModal}) => {
     textariaRef.current.focus();
   }, [myCommentForm]);
 
-  return ReactDOM.createPortal((
-    <div className={style.overlay} ref={overlayRef} onClick={handelClick}>
-      {loading ?
-        (<div className={style.spinnerWrap}>
-          <Spinner width={150} height={150} rmin={3} scalemin={0.3}/>
-        </div>) :
-        (<div className={style.modal}>
-          <Text As='h2' className={style.title}>{post?.title}</Text>
+  return ReactDOM.createPortal(
+    !token ?
 
-          {post?.selftext && (
-            <div className={style.content}>
-              <Markdown options={{
-                overrides: {
-                  a: {
-                    props: {
-                      target: '_blank',
+      (<Notifications closeModal={closeModal}>Необходимо аторизоваться на странице</Notifications>) :
+      (<div className={style.overlay} ref={overlayRef} onClick={handelClick}>
+        {loading ?
+
+          (<div className={style.spinnerWrap}>
+            <Spinner width={150} height={150} rmin={3} scalemin={0.3}/>
+          </div>) :
+          (<div className={style.modal}>
+            <Text As='h2' className={style.title}>{post?.title}</Text>
+            {post?.selftext && (
+              <div className={style.content}>
+                <Markdown options={{
+                  overrides: {
+                    a: {
+                      props: {
+                        target: '_blank',
+                      },
                     },
                   },
-                },
-              }}>
-                {post?.selftext}
-              </Markdown>
-            </div>
-          )}
+                }}>
+                  {post?.selftext}
+                </Markdown>
+              </div>
+            )}
 
-          <Text As='p' color='orange' className={style.author}>{post.author}</Text>
-          <button className={style.btn} onClick={handleCommentForm}>Добавить комментарий</button>
-          <div className={style.closeWrap}>
-            <button className={style.close} ref={closeRef}>
-              <SVG itemName='Close'/>
-            </button>
-          </div>
-          <Comments comments={comments} />
-          {myCommentForm && <FormComment textariaRef={textariaRef} />}
-        </div>)
-      }
-    </div>
+            <Text As='p' color='orange' className={style.author}>{post.author}</Text>
+            <button className={style.btn} onClick={handleCommentForm}>Добавить комментарий</button>
+            <div className={style.closeWrap}>
+              <button className={style.close} ref={closeRef}>
+                <SVG itemName='Close'/>
+              </button>
+            </div>
+            <Comments comments={comments} />
+            {myCommentForm && <FormComment textariaRef={textariaRef} />}
+          </div>)
+        }
+      </div>
   ), document.getElementById('modal-root'));
 };
 

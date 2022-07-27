@@ -15,5 +15,5 @@ export const usePostData = id => {
     dispatch(postRequestAsync(id));
   }, [token]);
 
-  return [post, comments, loading];
+  return [post, comments, loading, token];
 };
