@@ -5,7 +5,8 @@
   gap: 30px;
 }
 
-.spinnerWrap {
+.end {
+  flex-basis: 100%;
   color: var(--orange);
   display: flex;
   padding: 50px 0;
