@@ -19,6 +19,7 @@ export const usePostData = id => {
   }, [token]);
 
   useEffect(() => {
+    console.log(error);
     if (error === 400 || error === 404) {
       navigate('/error');
     }
