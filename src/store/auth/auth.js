@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {URL_API} from '../../api/const';
+import {notificationSuccess} from '../notification/notification';
 import {deleteToken} from '../token/token';
 
 export const AUTH_REQUEST = 'AUTH_REQUEST';
@@ -44,6 +45,7 @@ export const authRequestAsync = () => async (dispatch, getState) => {
     const data = {name, img};
 
     dispatch(authRequestSuccess(data));
+    dispatch(notificationSuccess(`${name}, портал Blogget рад приветствовать Вас!`));
   } catch (error) {
     console.warn(error);
     dispatch(authRequestError(error));

@@ -7,6 +7,7 @@ import {commentReducer} from './comment/comment.reducer';
 import {tokenMiddleware} from './token/token';
 import {postsReducer} from './posts/posts.reducer';
 import {postReducer} from './post/post.reducer';
+import {notificationReducer} from './notification/notification.reducer';
 
 const logger = store => next => action => {
   console.log(action);
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   posts: postsReducer,
   post: postReducer,
+  notification: notificationReducer,
 });
 
 

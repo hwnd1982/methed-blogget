@@ -66,6 +66,19 @@ nav {
   margin-top: 50px;
 } */
 
+
+.error {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.success {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
 .button {
   padding: 15px 20px;
   border: 2px solid white;
@@ -391,7 +404,7 @@ nav {
 }
 
 .bottom-left {
-  position: fixed;
+  /* position: fixed; */
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -403,8 +416,8 @@ nav {
   opacity: 0;
   max-width: 350px;
   margin: 20px;
-  bottom: 0;
-  left: 0;
+  /* bottom: 0; */
+  /* left: 0; */
 }
 
 .bottom-left.do-show {

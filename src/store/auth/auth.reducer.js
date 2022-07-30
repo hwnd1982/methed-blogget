@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   data: {},
   error: {},
+  isAuth: false,
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -13,6 +14,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         loading: true,
         error: {},
+        isAuth: false,
       };
     case AUTH_LOGOUT:
       return {
@@ -20,18 +22,21 @@ export const authReducer = (state = initialState, action) => {
         loading: false,
         data: {},
         error: {},
+        isAuth: false,
       };
     case AUTH_REQUEST_SUCCESS:
       return {
         ...state,
         loading: false,
         data: action.data,
+        isAuth: true,
       };
     case AUTH_REQUEST_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error,
+        isAuth: false,
       };
     default:
       return state;

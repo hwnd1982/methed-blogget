@@ -1,37 +1,48 @@
 import {useEffect} from 'react';
-import {useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {Outlet, useParams} from 'react-router-dom';
+import {notificationError} from '../../../store/notification/notification';
 import {postsRequestAsync} from '../../../store/posts/posts';
 import {Spinner} from '../../../UI/Spinner';
+import {End} from './End/End';
 import style from './List.module.css';
 import {Post} from './Post/Post';
 
 export const List = () => {
+  const token = useSelector(store => store.token.token);
   const postsData = useSelector(store => store.posts.data);
   const loading = useSelector(store => store.posts.loading);
-  const endList = useRef(null);
+  const isLast = useSelector(store => store.posts.isLast);
+
   const dispatch = useDispatch();
+  const {page} = useParams();
 
   useEffect(() => {
-    if (!endList?.current) return;
+    if (!token) {
+      dispatch(notificationError('Необходимо авторизоваться на странице.'));
+      return;
+    }
 
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        dispatch(postsRequestAsync());
-      }
-    }, {
-      rootMargin: '50px'
-    });
+    dispatch(postsRequestAsync(page));
+  }, [page]);
 
-    observer.observe(endList?.current);
-  }, [endList.current]);
-
-  return (<ul className={style.list}>
-    {postsData.map(postData => (<Post key={postData.id} postData={postData} />))}
-    {loading ?
-      (<li className={style.end}>
-        <Spinner />
-      </li>) :
-      (<li ref={endList} className={style.end} />)}
-  </ul>);
+  return (
+    <>
+      <ul className={style.list}>
+        {postsData.map(postData => (<Post key={postData.id} postData={postData} />))}
+        {loading &&
+          <li className={style.end}>
+            <Spinner />
+          </li>
+        }
+        {!isLast && (
+          postsData.length < 50 ?
+            <End /> :
+            <li className={style.end}>
+              <button className={style.btn} onClick={() => dispatch(postsRequestAsync())}>Загрузить еще...</button>
+            </li>)
+        }
+      </ul>
+      <Outlet />
+    </>);
 };

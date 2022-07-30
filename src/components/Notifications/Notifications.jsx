@@ -1,38 +1,54 @@
-import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import style from './Notifications.module.css';
-import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {notificationClose} from '../../store/notification/notification';
 
-export const Notifications = ({children, closeModal}) => {
-  const classes = classNames(
+export const Notifications = () => {
+  const dispatch = useDispatch();
+  const errors = useSelector(store => store.notification.errors);
+  const successes = useSelector(store => store.notification.successes);
+  const errorClasses = classNames(
     style['bottom-right'],
     style['notify'],
     style['do-show']
   );
-
-  useEffect(() => {
-    const id = setTimeout(closeModal, 3000);
-
-    return () => clearTimeout(id);
-  }, []);
+  const successClasses = classNames(
+    style['bottom-left'],
+    style['notify'],
+    style['do-show']
+  );
 
   return (ReactDOM.createPortal(
-    <div
-      onClick={closeModal}
-      className={classes}
-      data-notification-status='error'
-    >
-      {children}
-    </div>, document.getElementById('notifications-root')
+    <>
+      <div className={style.error}>
+        {errors.map(({id, message}) => (
+          <div
+            key={id}
+            onClick={() => {
+              dispatch(notificationClose(id));
+            }}
+            className={errorClasses}
+            data-notification-status='error'
+          >
+            {`${message}`}
+          </div>
+        ))}
+      </div>
+      <div className={style.success}>
+        {successes.map(({id, message}) => (
+          <div
+            key={id}
+            onClick={() => {
+              dispatch(notificationClose(id));
+            }}
+            className={successClasses}
+            data-notification-status='success'
+          >
+            {`${message}`}
+          </div>
+        ))}
+      </div>
+    </>, document.getElementById('notifications-root')
   ));
-};
-
-Notifications.propTypes = {
-  closeModal: PropTypes.func,
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.array
-  ])
 };

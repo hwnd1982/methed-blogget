@@ -1,10 +1,12 @@
 import axios from 'axios';
 import {URL_API} from '../../api/const';
+import {notificationError} from '../notification/notification';
 
 export const POSTS_REQUEST = 'POSTS_REQUEST';
 export const POSTS_REQUEST_SUCCESS = 'POSTS_REQUEST_SUCCESS';
 export const POSTS_REQUEST_SUCCESS_AFTER = 'POSTS_REQUEST_SUCCESS_AFTER';
 export const POSTS_REQUEST_ERROR = 'POSTS_REQUEST_ERROR';
+export const CHANGE_PAGE = 'CHANGE_PAGE';
 
 export const postsRequest = () => ({
   type: POSTS_REQUEST,
@@ -27,24 +29,35 @@ export const postsRequestError = error => ({
   error
 });
 
-export const postsRequestAsync = () => async (dispatch, getState) => {
+export const changePage = page => ({
+  type: CHANGE_PAGE,
+  page,
+});
+
+export const postsRequestAsync = (newPage) => async (dispatch, getState) => {
   try {
+    let page = getState().posts.page;
+
+    if (newPage) {
+      page = newPage;
+      dispatch(changePage(page));
+    }
+
     const token = getState().token.token;
     const loading = getState().posts.loading;
-    let after = getState().posts.after;
+    const after = getState().posts.after;
     const isLast = getState().posts.isLast;
 
     if (loading || isLast) return;
 
     dispatch(postsRequest());
-    const response = await axios(`${URL_API}/best?limit=10${after ? `&after=${after}` : ''}`, {
+    const response = await axios(`${URL_API}/${page}?limit=10${after ? `&after=${after}` : ''}`, {
       headers: {
         Authorization: `bearer ${token}`,
       },
     });
 
     const {data: {children: posts}} = response.data;
-    after = response.data.data.after;
     const data = posts.map(({data: {id, title, selftext, thumbnail, author, ups, created}}) =>
       ({
         id,
@@ -56,12 +69,14 @@ export const postsRequestAsync = () => async (dispatch, getState) => {
         date: created
       }));
 
-    // console.log(posts);
-    after ?
-      dispatch(postsRequestSuccessAfter({data, after})) :
-      dispatch(postsRequestSuccess({data, after}));
-  } catch (error) {
-    console.warn(error);
-    dispatch(postsRequestError(error));
+    if (after) {
+      dispatch(postsRequestSuccessAfter({data, after: response.data.data.after}));
+    } else {
+      dispatch(postsRequestSuccess({data, after: response.data.data.after}));
+    }
+  } catch ({response: {data}}) {
+    console.warn(data);
+    dispatch(postsRequestError(data));
+    dispatch(notificationError(`Ошибка: ${data.message}`));
   }
 };

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {URL_API} from '../../api/const';
+import {notificationError} from '../notification/notification';
 
 export const POST_REQUEST = 'POST_REQUEST';
 export const POST_REQUEST_SUCCESS = 'POST_REQUEST_SUCCESS';
@@ -47,8 +48,9 @@ export const postRequestAsync = id => async (dispatch, getState) => {
       .filter(comment => comment.author && comment.author !== '[deleted]' && comment.body !== '[removed]');
 
     dispatch(postRequestSuccess(data, comments));
-  } catch (error) {
-    console.warn(error);
-    dispatch(postRequestError(error));
+  } catch ({response: {data}}) {
+    console.warn(data);
+    dispatch(postRequestError(data));
+    dispatch(notificationError(`Ошибка: ${data.message}`));
   }
 };

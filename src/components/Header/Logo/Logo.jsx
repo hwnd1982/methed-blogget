@@ -1,8 +1,9 @@
 import style from './Logo.module.css';
 import {SVG} from '../../../UI/SVG/SVG';
+import {Link} from 'react-router-dom';
 
 export const Logo = () => (
-  <a className={style.link} href='#'>
+  <Link to={`/`} className={style.link} href='/'>
     <SVG itemName='Logo'/>
-  </a>
+  </Link>
 );

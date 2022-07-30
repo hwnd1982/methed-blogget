@@ -10,19 +10,25 @@ import {Comments} from './Comments/Comments';
 import {FormComment} from './FormComment/FormComment';
 import {Spinner} from '../../UI/Spinner';
 import {useState} from 'react';
-import {Notifications} from '../Notifications/Notifications';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {notificationError} from '../../store/notification/notification';
 
-export const Modal = ({id, closeModal}) => {
+export const Modal = () => {
+  const dispatch = useDispatch();
+  const {id, page} = useParams();
+  const navigate = useNavigate();
+
   const [post, comments, loading, token] = usePostData(id);
-
   const [myCommentForm, setMyCommentForm] = useState(false);
+
   const overlayRef = useRef(null);
   const closeRef = useRef(null);
   const textariaRef = useRef(null);
 
   const handelClick = ({target}) =>
-    (target === overlayRef.current || closeRef.current.contains(target)) && closeModal();
-  const handelKey = ({key}) => (key === 'Escape' && closeModal());
+    (target === overlayRef.current || closeRef.current.contains(target)) && navigate(`/category/${page}`);
+  const handelKey = ({key}) => (key === 'Escape' && navigate(`/category/${page}`));
   const handleCommentForm = () => {
     if (myCommentForm) return textariaRef.current.focus();
 
@@ -30,6 +36,12 @@ export const Modal = ({id, closeModal}) => {
   };
 
   useEffect(() => {
+    if (!token) {
+      navigate(`/category/${page}`);
+      dispatch(notificationError('Необходимо авторизоваться на странице.'));
+      return;
+    }
+
     document.addEventListener('keydown', handelKey);
     return () => {
       document.removeEventListener('keydown', handelKey);
@@ -42,15 +54,14 @@ export const Modal = ({id, closeModal}) => {
   }, [myCommentForm]);
 
   return ReactDOM.createPortal(
-    !token ?
-
-      (<Notifications closeModal={closeModal}>Необходимо аторизоваться на странице</Notifications>) :
+    token &&
       (<div className={style.overlay} ref={overlayRef} onClick={handelClick}>
         {loading ?
 
           (<div className={style.spinnerWrap}>
             <Spinner width={150} height={150} rmin={3} scalemin={0.3}/>
           </div>) :
+
           (<div className={style.modal}>
             <Text As='h2' className={style.title}>{post?.title}</Text>
             {post?.selftext && (
@@ -72,7 +83,7 @@ export const Modal = ({id, closeModal}) => {
             <Text As='p' color='orange' className={style.author}>{post.author}</Text>
             <button className={style.btn} onClick={handleCommentForm}>Добавить комментарий</button>
             <div className={style.closeWrap}>
-              <button className={style.close} ref={closeRef}>
+              <button className={style.close} ref={closeRef} onClick={handelClick}>
                 <SVG itemName='Close'/>
               </button>
             </div>
@@ -81,7 +92,7 @@ export const Modal = ({id, closeModal}) => {
           </div>)
         }
       </div>
-  ), document.getElementById('modal-root'));
+      ), document.getElementById('modal-root'));
 };
 
 Modal.propTypes = {

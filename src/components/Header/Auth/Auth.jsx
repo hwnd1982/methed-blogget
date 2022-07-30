@@ -6,7 +6,6 @@ import {useState} from 'react';
 import {useAuth} from '../../../hooks/useAuth';
 import {AuthLoader} from './AuthLoader/AuthLoader';
 
-
 export const Auth = () => {
   const [auth, loading, authLogout] = useAuth();
   const [logout, setLogout] = useState(false);

@@ -8,6 +8,7 @@ export const useAuth = () => {
   const auth = useSelector(store => store.auth.data);
   const token = useSelector(store => store.token.token);
   const loading = useSelector(store => store.auth.loading);
+  const isAuth = useSelector(store => store.auth.isAuth);
 
   const logout = () => {
     dispatch(deleteToken());
@@ -15,11 +16,11 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    if (!token) return;
+    if (!token || isAuth) return;
 
     dispatch(authRequestAsync());
   }, [token]);
 
 
-  return [auth, loading, logout];
+  return [auth, loading, logout, isAuth];
 };
