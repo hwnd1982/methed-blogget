@@ -11,13 +11,13 @@ import {useEffect} from 'react';
 
 export const Main = () => {
   const navigate = useNavigate();
-  const {error} = useSelector(store => store.posts.error);
+  const {status} = useSelector(store => store.posts.error);
 
   useEffect(() => {
-    if (error === 400 || error === 404) {
+    if (status === 400 || status === 404) {
       navigate('error');
     }
-  }, [error]);
+  }, [status]);
 
   return (<main className={style.main}>
     <Layout>

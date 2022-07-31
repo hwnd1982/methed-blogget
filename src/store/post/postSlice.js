@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {postRequestAsync} from './post';
 
 const initialState = {
   loading: false,
@@ -10,18 +11,19 @@ const initialState = {
 export const postSlice = createSlice({
   name: 'post',
   initialState,
-  reducers: {
-    postRequest: state => {
+  reducers: {},
+  extraReducers: {
+    [postRequestAsync.pending.type]: state => {
       state.loading = true;
       state.error = {};
     },
-    postRequestSuccess: (state, action) => {
+    [postRequestAsync.fulfilled.type]: (state, action) => {
       state.loading = false;
       state.data = action.payload.data;
       state.comments = action.payload.comments;
       state.error = {};
     },
-    postRequestError: (state, action) => {
+    [postRequestAsync.rejected.type]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

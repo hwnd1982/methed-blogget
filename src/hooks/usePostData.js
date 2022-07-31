@@ -10,7 +10,7 @@ export const usePostData = id => {
   const post = useSelector(store => store.post.data);
   const comments = useSelector(store => store.post.comments);
   const loading = useSelector(store => store.post.loading);
-  const {error} = useSelector(store => store.post.error);
+  const {status} = useSelector(store => store.post.error);
 
   useEffect(() => {
     if (!token) return;
@@ -19,11 +19,10 @@ export const usePostData = id => {
   }, [token]);
 
   useEffect(() => {
-    console.log(error);
-    if (error === 400 || error === 404) {
+    if (status === 400 || status === 404) {
       navigate('/error');
     }
-  }, [error]);
+  }, [status]);
 
   return [post, comments, loading, token];
 };

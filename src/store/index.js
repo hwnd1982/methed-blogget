@@ -3,7 +3,7 @@ import {tokenReducer} from './token/token.reducer';
 import {authReducer} from './auth/auth.reducer';
 import {commentReducer} from './comment/comment.reducer';
 import {tokenMiddleware} from './token/token';
-import {postsReducer} from './posts/posts.reducer';
+import postsReducer from './posts/postsSlice';
 import postReducer from './post/postSlice';
 import {notificationReducer} from './notification/notification.reducer';
 
