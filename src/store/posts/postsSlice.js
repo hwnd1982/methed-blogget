@@ -1,31 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   data: [],
   error: {},
-  page: "",
-  query: "",
-  after: "",
+  page: '',
+  query: '',
+  after: '',
   loading: false,
   isLast: false,
 };
 
 export const postsSlice = createSlice({
-  name: "posts",
+  name: 'posts',
   initialState,
   reducers: {
     changePage: (state, action) => {
       state.page = action.payload;
-      state.query = "";
-      state.after = "";
+      state.query = '';
+      state.after = '';
       state.data = [];
       state.error = {};
       state.isLast = false;
     },
     setQuery: (state, action) => {
-      state.page = "search";
+      state.page = 'search';
       state.query = action.payload;
-      state.after = "";
+      state.after = '';
       state.data = [];
       state.error = {};
       state.isLast = false;

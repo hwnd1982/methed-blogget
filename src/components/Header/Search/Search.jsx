@@ -1,21 +1,25 @@
 /* eslint-disable max-len */
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {searchRequest} from '../../../store/search/search';
+import {useNavigate} from 'react-router-dom';
+import {postsSlice} from '../../../store/posts/postsSlice';
 import {SVG} from '../../../UI/SVG';
 import style from './Search.module.css';
 
 
 export const Search = () => {
   const dispatch = useDispatch();
-  const [search, setSearch] = useState('');
+  const navigate = useNavigate();
+  const [query, setQuery] = useState('');
 
   const handlerSubmit = event => {
     event.preventDefault();
-    dispatch(searchRequest(search));
+    dispatch(postsSlice.actions.request({query}));
+    navigate(`/category/search`);
+    setQuery('');
   };
 
-  const handlerChange = ({target}) => setSearch(target.value);
+  const handlerChange = ({target}) => setQuery(target.value);
 
   return (
     <form className={style.form} onSubmit={handlerSubmit}>
@@ -23,7 +27,7 @@ export const Search = () => {
         className={style.search}
         type='search'
         onChange={handlerChange}
-        value={search}
+        value={query}
       />
       <button className={style.button} type='submit' aria-label='Кнопка Искать'>
         <SVG className={style.svg} itemName='Search' />

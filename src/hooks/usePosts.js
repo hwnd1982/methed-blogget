@@ -1,8 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { notificationError } from "../store/notification/notification";
-// import { postsRequestAsync } from "../store/posts/posts";
-import postsSlice from "../store/requests/postsSlice";
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {notificationError} from '../store/notification/notification';
+import {postsSlice} from '../store/posts/postsSlice';
 
 export const usePosts = (page) => {
   const dispatch = useDispatch();
@@ -13,12 +12,11 @@ export const usePosts = (page) => {
 
   useEffect(() => {
     if (!token) {
-      dispatch(notificationError("Необходимо авторизоваться на странице."));
+      dispatch(notificationError('Необходимо авторизоваться на странице.'));
       return;
     }
 
-    // dispatch(postsRequestAsync(page));
-    dispatch(postsSlice.actions.request({ page }));
+    dispatch(postsSlice.actions.request({page}));
   }, [page]);
-  return { posts, loading, isLast };
+  return {posts, loading, isLast};
 };

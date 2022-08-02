@@ -1,7 +1,7 @@
-import { DELETE_TOKEN, UPDATE_TOKEN } from "./token";
+import {DELETE_TOKEN, UPDATE_TOKEN} from './token';
 
 const initialState = {
-  token: "",
+  token: '',
   options: {},
 };
 

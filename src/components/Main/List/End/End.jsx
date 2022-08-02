@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import {useEffect, useRef} from 'react';
 import {useDispatch} from 'react-redux';
-import { postsSlice } from '../../../../store/requests/postsSlice';
-// import {postsRequestAsync} from '../../../../store/posts/posts';
+import {postsSlice} from '../../../../store/posts/postsSlice';
 import style from './End.module.css';
 
 export const End = () => {
