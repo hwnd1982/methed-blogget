@@ -1,7 +1,8 @@
 import {useDispatch} from 'react-redux';
 import {Outlet, useParams} from 'react-router-dom';
 import {usePosts} from '../../../hooks/usePosts';
-import {postsRequestAsync} from '../../../store/posts/posts';
+import { postsSlice } from '../../../store/requests/postsSlice';
+// import {postsRequestAsync} from '../../../store/posts/posts';
 import {Spinner} from '../../../UI/Spinner';
 import {End} from './End/End';
 import style from './List.module.css';
@@ -25,7 +26,7 @@ export const List = () => {
           posts.length < 50 ?
             <End /> :
             <li className={style.end}>
-              <button className={style.btn} onClick={() => dispatch(postsRequestAsync())}>Загрузить еще...</button>
+              <button className={style.btn} onClick={() => dispatch(postsSlice.actions.request())}>Загрузить еще...</button>
             </li>)
         }
       </ul>

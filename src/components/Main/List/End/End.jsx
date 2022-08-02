@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import {useEffect, useRef} from 'react';
 import {useDispatch} from 'react-redux';
-import {postsRequestAsync} from '../../../../store/posts/posts';
+import { postsSlice } from '../../../../store/requests/postsSlice';
+// import {postsRequestAsync} from '../../../../store/posts/posts';
 import style from './End.module.css';
 
 export const End = () => {
@@ -11,7 +12,7 @@ export const End = () => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        dispatch(postsRequestAsync());
+        dispatch(postsSlice.actions.request());
       }
     }, {
       rootMargin: '50px'

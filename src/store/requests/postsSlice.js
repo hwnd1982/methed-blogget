@@ -1,45 +1,50 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {postsRequestAsync} from './posts';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   data: [],
   error: {},
-  page: '',
-  after: '',
+  page: "",
+  query: "",
+  after: "",
   loading: false,
   isLast: false,
 };
 
 export const postsSlice = createSlice({
-  name: 'post',
+  name: "posts",
   initialState,
   reducers: {
     changePage: (state, action) => {
       state.page = action.payload;
-      state.after = '';
+      state.query = "";
+      state.after = "";
       state.data = [];
       state.error = {};
       state.isLast = false;
     },
-    loading: (state) => {
-      state.loading = true;
-    }
-  },
-  extraReducers: {
-    [postsRequestAsync.pending.type]: (state) => {
+    setQuery: (state, action) => {
+      state.page = "search";
+      state.query = action.payload;
+      state.after = "";
+      state.data = [];
       state.error = {};
+      state.isLast = false;
     },
-    [postsRequestAsync.fulfilled.type]: (state, action) => {
+    request: (state) => {
+      state.error = {};
+      state.loading = true;
+    },
+    requestSuccess: (state, action) => {
       state.loading = false;
       state.data = action.payload.data;
       state.after = action.payload.after;
       state.isLast = !action.payload.after;
     },
-    [postsRequestAsync.rejected.type]: (state, action) => {
+    requestError: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
-  }
+  },
 });
 
 export default postsSlice.reducer;

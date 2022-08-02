@@ -1,6 +1,6 @@
 // import {takeEvery} from 'redux-saga/effects';
-import {watchSearch} from './search/search.saga';
-
+import { watchPosts } from "./requests/postsSaga";
+import { watchSearch } from "./search/search.saga";
 
 // function* workerSaga(action) {
 //   yield console.log('is working');
@@ -10,8 +10,8 @@ import {watchSearch} from './search/search.saga';
 //   yield takeEvery('SUBMIT', workerSaga);
 // }
 
-
 export default function* rootSaga() {
   // yield watchSaga();
   yield watchSearch();
+  yield watchPosts();
 }

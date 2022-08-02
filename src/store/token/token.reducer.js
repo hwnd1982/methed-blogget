@@ -1,7 +1,8 @@
-import {DELETE_TOKEN, UPDATE_TOKEN} from './token';
+import { DELETE_TOKEN, UPDATE_TOKEN } from "./token";
 
 const initialState = {
-  token: '',
+  token: "",
+  options: {},
 };
 
 export const tokenReducer = (state = initialState, action) => {
@@ -10,13 +11,15 @@ export const tokenReducer = (state = initialState, action) => {
       return {
         ...state,
         token: action.token,
+        options: {
+          headers: {
+            Authorization: `bearer ${action.token}`,
+          },
+        },
       };
     case DELETE_TOKEN:
-      return {
-        ...state,
-        token: '',
-      };
-    default: return state;
+      return initialState;
+    default:
+      return state;
   }
 };
-
